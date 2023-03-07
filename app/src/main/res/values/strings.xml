@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ComposeAndFlows</string>
+    <string name="error_handling">Error Handling</string>
+    <string name="lifecycle">Lifecycle</string>
+</resources>
