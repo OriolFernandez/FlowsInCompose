@@ -10,12 +10,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.getValue
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.composeandflows.scenarios.lifecycle.domain.model.Counters
 import com.example.composeandflows.ui.theme.ComposeAndFlowsTheme
 import kotlinx.coroutines.flow.Flow
@@ -37,6 +38,7 @@ class LifecycleExampleActivity : ComponentActivity() {
             }
         }
     }
+
 }
 
 // DON'T
@@ -53,13 +55,14 @@ fun MainComposable(
 fun MainComposable(
     viewModel: CounterViewModel = koinViewModel()
 ) {
-    val counters: Flow<Counters> = viewModel.getCounters()
-    Counters(counters)
+    val counters: Counters by viewModel.counters
+        .collectAsStateWithLifecycle(minActiveState = Lifecycle.State.STARTED)
+    ShowCounters(counters.counter1, counters.counter2)
 }
 
 @Composable
 fun Counters(flow: Flow<Counters>) {
-    val counters by flow.collectAsState(Counters(0, 0))
+    val counters by flow.collectAsStateWithLifecycle(Counters(0, 0))
     ShowCounters(counter1 = counters.counter1, counter2 = counters.counter2)
 }
 

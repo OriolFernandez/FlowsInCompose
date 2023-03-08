@@ -1,17 +1,9 @@
 package com.example.composeandflows.scenarios.lifecycle.ui
 
 import androidx.lifecycle.ViewModel
-import com.example.composeandflows.scenarios.lifecycle.data.CounterRepository
 import com.example.composeandflows.scenarios.lifecycle.domain.model.Counters
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.StateFlow
 
-class CounterViewModel(private val repository: CounterRepository) : ViewModel() {
-    private var viewModelCounter = 0
-    fun getCounters(): Flow<Counters> =
-        repository.counter().map {
-            viewModelCounter++
-            Counters(it, viewModelCounter)
-        }
+abstract class CounterViewModel (): ViewModel() {
+   abstract val counters: StateFlow<Counters>
 }
